@@ -3,6 +3,8 @@ package com.project.mytasktracker;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,8 +15,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.project.mytasktracker.MenuFolderItem.FolderRecyclerViewAdapter;
+import com.project.mytasktracker.MenuFolderItem.TaskFolderItem;
+
+import java.util.ArrayList;
+
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private RecyclerView recyclerView;
+    private FolderRecyclerViewAdapter adapter;
+    private ArrayList<TaskFolderItem> menuItemList;
+    private DrawerLayout drawer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +53,22 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        menuItemList = new ArrayList<TaskFolderItem>();
+        for(int i = 0; i < 5; ++i) {
+            menuItemList.add(new TaskFolderItem("header" + i));
+        }
+        adapter = new FolderRecyclerViewAdapter(this, menuItemList);
+        recyclerView.setAdapter(adapter);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        this.drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
     }
 
     @Override
@@ -94,8 +123,19 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
+    public void onFolderSelect() {
+        System.out.println("OnFolderSelect()");
+
+
+
+        drawer.closeDrawer(GravityCompat.START);
+    }
+
+
 }
