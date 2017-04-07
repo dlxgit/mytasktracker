@@ -1,4 +1,4 @@
-package com.project.mytasktracker.MenuFolderItem;
+package com.project.mytasktracker.ContentTaskItem;
 
 import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
@@ -8,22 +8,25 @@ import android.widget.TextView;
 import com.project.mytasktracker.NavigationDrawerActivity;
 import com.project.mytasktracker.R;
 
+/**
+ * Created by Andrey on 08.04.2017.
+ */
 
-public class FolderRecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class TaskRecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     TextView name;
     View container;
     int position;
     NavigationDrawerActivity activity;
 
-    public FolderRecyclerViewHolder(View itemView, Activity activity) {
+    public TaskRecyclerViewHolder(View itemView, Activity activity) {
         super(itemView);
         this.activity = (NavigationDrawerActivity) activity;
-        name = (TextView) itemView.findViewById(R.id.menu_item_folder_text);
-        container = (View) itemView.findViewById(R.id.menu_item_folder_root);
+        name = (TextView) itemView.findViewById(R.id.content_task_item_text);
+        container = (View) itemView.findViewById(R.id.content_task_item_root);
         container.setOnClickListener(this);
     }
 
-    public void bindData(TaskFolderItem taskFolderItem, int position) {
+    public void bindData(TaskItem taskFolderItem, int position) {
         CharSequence cs = (CharSequence)taskFolderItem.getName();
         name.setText(cs);
         this.position = position;

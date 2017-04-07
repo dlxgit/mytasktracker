@@ -15,6 +15,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.project.mytasktracker.ContentTaskItem.TaskItem;
+import com.project.mytasktracker.ContentTaskItem.TaskRecyclerViewAdapter;
 import com.project.mytasktracker.MenuFolderItem.FolderRecyclerViewAdapter;
 import com.project.mytasktracker.MenuFolderItem.TaskFolderItem;
 
@@ -23,11 +25,15 @@ import java.util.ArrayList;
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private RecyclerView recyclerView;
-    private FolderRecyclerViewAdapter adapter;
+    private RecyclerView menuRecyclerView;
+    private FolderRecyclerViewAdapter menuRecyclerViewAdapter;
+
+    private RecyclerView contentRecyclerView;
+    private TaskRecyclerViewAdapter contentRecyclerViewAdapter;
+
     private ArrayList<TaskFolderItem> menuItemList;
     private DrawerLayout drawer;
-
+    private TaskStorage taskStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,18 +61,35 @@ public class NavigationDrawerActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        menuRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        contentRecyclerView = (RecyclerView) findViewById(R.id.content_tasks_recyclerView);
 
         menuItemList = new ArrayList<TaskFolderItem>();
+        ArrayList<String> strList = new ArrayList<>();
         for(int i = 0; i < 5; ++i) {
             menuItemList.add(new TaskFolderItem("header" + i));
+            strList.add(menuItemList.get(i).getName());
         }
-        adapter = new FolderRecyclerViewAdapter(this, menuItemList);
-        recyclerView.setAdapter(adapter);
+
+        taskStorage = new TaskStorage(strList);
+
+        menuRecyclerViewAdapter = new FolderRecyclerViewAdapter(this, menuItemList);
+        menuRecyclerView.setAdapter(menuRecyclerViewAdapter);
+
+        ArrayList<TaskItem> curItems = taskStorage.getCurrentData("header1");
+        contentRecyclerViewAdapter = new TaskRecyclerViewAdapter(this, curItems);
+        contentRecyclerView.setAdapter(contentRecyclerViewAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        menuRecyclerView.setLayoutManager(linearLayoutManager);
+        //можно ли использовать лейаутменеджер для другого ресайклервью?
+
+        LinearLayoutManager contentLayoutManager = new LinearLayoutManager(this);
+        contentLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        contentRecyclerView.setLayoutManager(contentLayoutManager);
+
 
         this.drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
     }
@@ -129,12 +152,19 @@ public class NavigationDrawerActivity extends AppCompatActivity
     }
 
 
-    public void onFolderSelect() {
+    public void onFolderSelect(int position) {
         System.out.println("OnFolderSelect()");
 
 
+        String key = menuItemList.get(position).getName();
+        ArrayList<TaskItem> currentItems = taskStorage.getCurrentData(key);
+
 
         drawer.closeDrawer(GravityCompat.START);
+    }
+
+    public void onTaskSelect() {
+        System.out.println("OnTaskSelect()");
     }
 
 

@@ -31,7 +31,7 @@ public class FolderRecyclerViewAdapter extends RecyclerView.Adapter<FolderRecycl
 
     @Override
     public void onBindViewHolder(FolderRecyclerViewHolder holder, int position) {
-        holder.bindData(m_items.get(position));
+        holder.bindData(m_items.get(position), position);
     }
 
     @Override
