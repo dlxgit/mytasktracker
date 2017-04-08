@@ -172,8 +172,10 @@ public class NavigationDrawerActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
     }
 
-    public void onTaskSelect() {
+    public void onTaskSelect(int position) {
+
         System.out.println("OnTaskSelect()");
+
     }
 
 }

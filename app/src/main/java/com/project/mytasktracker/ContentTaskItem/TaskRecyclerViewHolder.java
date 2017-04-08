@@ -32,6 +32,6 @@ public class TaskRecyclerViewHolder extends RecyclerView.ViewHolder implements V
 
     @Override
     public void onClick(View view) {
-        activity.onFolderSelect(position);
+        activity.onTaskSelect(position);
     }
 }
