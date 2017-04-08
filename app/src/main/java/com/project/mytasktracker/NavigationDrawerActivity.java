@@ -32,6 +32,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private TaskRecyclerViewAdapter contentRecyclerViewAdapter;
 
     private ArrayList<TaskFolderItem> menuItemList;
+    private ArrayList<TaskItem> contentTaskItemList;
+
     private DrawerLayout drawer;
     private TaskStorage taskStorage;
 
@@ -77,14 +79,14 @@ public class NavigationDrawerActivity extends AppCompatActivity
         menuRecyclerViewAdapter = new FolderRecyclerViewAdapter(this, menuItemList);
         menuRecyclerView.setAdapter(menuRecyclerViewAdapter);
 
-        ArrayList<TaskItem> curItems = taskStorage.getCurrentData("header1");
-        contentRecyclerViewAdapter = new TaskRecyclerViewAdapter(this, curItems);
+        contentTaskItemList = taskStorage.getCurrentData("header0");
+        contentRecyclerViewAdapter = new TaskRecyclerViewAdapter(this, contentTaskItemList);
         contentRecyclerView.setAdapter(contentRecyclerViewAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         menuRecyclerView.setLayoutManager(linearLayoutManager);
-        //можно ли использовать лейаутменеджер для другого ресайклервью?
+
 
         LinearLayoutManager contentLayoutManager = new LinearLayoutManager(this);
         contentLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -157,8 +159,15 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
 
         String key = menuItemList.get(position).getName();
-        ArrayList<TaskItem> currentItems = taskStorage.getCurrentData(key);
+        contentTaskItemList = taskStorage.getCurrentData(key);
+        //doesnt work
+        //contentRecyclerViewAdapter.notifyItemRangeChanged(0, contentTaskItemList.size());
+        //contentRecyclerView.invalidate();
+        //
 
+        //kostil(for changing recyclerView data)
+        contentRecyclerViewAdapter = new TaskRecyclerViewAdapter(this, contentTaskItemList);
+        contentRecyclerView.setAdapter(contentRecyclerViewAdapter);
 
         drawer.closeDrawer(GravityCompat.START);
     }
@@ -166,6 +175,5 @@ public class NavigationDrawerActivity extends AppCompatActivity
     public void onTaskSelect() {
         System.out.println("OnTaskSelect()");
     }
-
 
 }

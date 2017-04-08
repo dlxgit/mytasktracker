@@ -18,9 +18,20 @@ public class TaskStorage {
         for(int i = 0; i < 10; ++i) {
             taskItems.add(new TaskItem("Name" + i, "Description" + i, 1));
         }
+
         for(String folder:folders) {
-            hashMap.put(folder, taskItems);
+            ArrayList<TaskItem> newItems = new ArrayList<>();
+            for(TaskItem taskItm:taskItems) {
+                TaskItem newItem = new TaskItem(taskItm.getName(), taskItm.getDescription(), taskItm.getPriority());
+                newItem.setName(folder + "_" + taskItm.getName());
+                newItems.add(newItem);
+            }
+
+            hashMap.put(folder, newItems);
+
+            //после вставки ^ происходит наращивание в taskItems (при каждой новой итерации - наращивается один и тот же name!!
         }
+
         //
         //init from json?
     }

@@ -8,9 +8,7 @@ import android.widget.TextView;
 import com.project.mytasktracker.NavigationDrawerActivity;
 import com.project.mytasktracker.R;
 
-/**
- * Created by Andrey on 08.04.2017.
- */
+
 
 public class TaskRecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     TextView name;
@@ -34,7 +32,6 @@ public class TaskRecyclerViewHolder extends RecyclerView.ViewHolder implements V
 
     @Override
     public void onClick(View view) {
-
         activity.onFolderSelect(position);
     }
 }
