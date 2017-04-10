@@ -69,12 +69,6 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
     }
 
     public void onItemClick(TaskRecyclerViewHolder holder, int position) {
-//        if(selectedItemPositions.contains(position)) {
-//            selectedItemPositions.remove(new Integer(position));
-//        }
-//        else {
-//            selectedItemPositions.add(position);
-//        }
         manipulateDependingOnSelection(holder, position);
     }
 
@@ -98,10 +92,9 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
     }
 
     //calling from Holder
-    //why bool param?
     private void manipulateDependingOnSelection(TaskRecyclerViewHolder holder, int itemPosition) {
         boolean newStatus;
-        if(selectedItemPositions.contains(itemPosition)) {
+        if(isItemSelected(itemPosition)) {
             newStatus = false;
 
             //int taskIndex = selectedItemPositions.get(new Integer(itemPosition));

@@ -56,6 +56,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        this.drawer = (DrawerLayout) findViewById(R.id.drawer_root_layout);
+        
         addTaskFab = (FloatingActionButton) findViewById(R.id.fab);
         addTaskFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +67,8 @@ public class NavigationDrawerActivity extends AppCompatActivity
             }
         });
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -73,8 +76,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
-
 
         menuRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         contentRecyclerView = (RecyclerView) findViewById(R.id.content_tasks_recyclerView);
@@ -105,7 +106,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         contentRecyclerView.setLayoutManager(contentLayoutManager);
 
         bottomTaskEditLayout = (LinearLayout) findViewById(R.id.task_select_bottom_root);
-        this.drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
 
         //contentRecyclerView.
 
@@ -114,7 +115,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
             return;
@@ -226,6 +226,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         addTaskFab.setVisibility(View.GONE);
 
         contentRecyclerViewAdapter.setSelectionMode(true);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     private void onSelectionModeEnd() {
@@ -234,5 +235,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
         addTaskFab.setVisibility(View.VISIBLE);
         contentRecyclerViewAdapter.setSelectionMode(false);
         contentRecyclerViewAdapter.notifyAllChanged();
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 }
