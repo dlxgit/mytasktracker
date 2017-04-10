@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,14 +10,19 @@
     tools:context="com.project.mytasktracker.NavigationDrawerActivity"
     tools:showIn="@layout/app_bar_navigation_drawer">
 
+    <include
+        layout="@layout/toolbar_main"></include>
     <TextView
+        android:id="@+id/content_nav_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Content"/>
     <android.support.v7.widget.RecyclerView
+        android:layout_below="@id/content_nav_textView"
         android:id="@+id/content_tasks_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
     </android.support.v7.widget.RecyclerView>
-</LinearLayout>
+
+    <include layout="@layout/task_select_bottom_menu"/>
+</RelativeLayout>
