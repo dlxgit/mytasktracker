@@ -30,7 +30,7 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
     @Override
     public TaskRecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_task_item, parent, false);
-        return new TaskRecyclerViewHolder(view, activity);
+        return new TaskRecyclerViewHolder(view, activity, this);
     }
 
     @Override
@@ -55,21 +55,40 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
 
     public void setSelectionMode(boolean selectionMode) {
         isSelectionMode = selectionMode;
-        if(selectionMode == false) {
-            resetSelectedStatus();
+        if(!selectionMode) {
+            resetSelected();
             //notifyAllChanged();
         }
-        notifyAllChanged();
+        else {
+            notifyAllChanged();
+        }
     }
 
     public void notifyAllChanged() {
         notifyItemRangeChanged(0, m_items.size());
     }
 
-    private void resetSelectedStatus() {
-        for (TaskItem item : m_items
-                ) {
-            item.isItemSelected = false;
+    public void onItemClick(int position) {
+        if(selectedItemPositions.contains(position)) {
+            selectedItemPositions.remove(new Integer(position));
         }
+        else {
+            selectedItemPositions.add(position);
+        }
+    }
+
+    private void resetSelected() {
+        for(int i = 0; i < selectedItemPositions.size(); ++i) {
+            int position = selectedItemPositions.get(i);
+            TaskItem item = m_items.get(position);
+            item.isItemSelected = false;
+            notifyItemChanged(position);
+        }
+        selectedItemPositions.clear();
+    }
+
+    private void changeSelectingStatus(int position, boolean status) {
+        TaskItem item = m_items.get(position);
+        item.isItemSelected = status
     }
 }

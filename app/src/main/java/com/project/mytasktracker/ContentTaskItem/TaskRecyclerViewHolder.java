@@ -15,17 +15,18 @@ public class TaskRecyclerViewHolder extends RecyclerView.ViewHolder implements V
     View root;
 
     TextView name;
-    View container;
+
     int position;
+    TaskRecyclerViewAdapter adapter;
     NavigationDrawerActivity activity;
 
-    public TaskRecyclerViewHolder(View root, Activity activity) {
+    public TaskRecyclerViewHolder(View root, Activity activity, TaskRecyclerViewAdapter adapter) {
         super(root);
         this.root = root;
+        root.setOnClickListener(this);
+        this.adapter = adapter;
         this.activity = (NavigationDrawerActivity) activity;
         name = (TextView) root.findViewById(R.id.content_task_item_text);
-        container = (View) root.findViewById(R.id.content_task_item_root);
-        container.setOnClickListener(this);
     }
 
     public void bindData(TaskItem taskItem, int position) {
@@ -45,6 +46,7 @@ public class TaskRecyclerViewHolder extends RecyclerView.ViewHolder implements V
 
     @Override
     public void onClick(View view) {
+        adapter.onItemClick(position);
         activity.onTaskSelect(position);
         root.setBackgroundColor(Color.GREEN);
     }
