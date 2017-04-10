@@ -36,18 +36,20 @@ public class TaskRecyclerViewHolder extends RecyclerView.ViewHolder implements V
         root.setBackgroundColor(0);
     }
 
-    public void bindDataWithSelectedStatus(TaskItem taskItem, int position, boolean isSelected) {
-        bindData(taskItem, position);
+    @Override
+    public void onClick(View view) {
+        adapter.onItemClick(this, position);
+        activity.onTaskSelect(position);
+        //root.setBackgroundColor(Color.GREEN);
+    }
 
-        if(isSelected == false) {
+    public void changeItemSelectionStatus(boolean isSelected) {
+        if(isSelected) {
+            root.setBackgroundColor(Color.GREEN);
+        }
+        else {
             root.setBackgroundColor(0);
         }
     }
 
-    @Override
-    public void onClick(View view) {
-        adapter.onItemClick(position);
-        activity.onTaskSelect(position);
-        root.setBackgroundColor(Color.GREEN);
-    }
 }

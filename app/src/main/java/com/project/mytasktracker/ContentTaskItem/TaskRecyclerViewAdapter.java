@@ -36,7 +36,7 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
     @Override
     public void onBindViewHolder(TaskRecyclerViewHolder holder, int position) {
         //if(isSelectionMode) {
-            holder.bindDataWithSelectedStatus(m_items.get(position), position, isSelectionMode);
+        holder.bindData(m_items.get(position), position);
         //}
         //else {
         //    holder.bindData(m_items.get(position), position);
@@ -55,12 +55,12 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
 
     public void setSelectionMode(boolean selectionMode) {
         isSelectionMode = selectionMode;
-        if(!selectionMode) {
+        if(!isSelectionMode) {
             resetSelected();
             //notifyAllChanged();
         }
         else {
-            notifyAllChanged();
+            //notifyAllChanged();
         }
     }
 
@@ -68,20 +68,21 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
         notifyItemRangeChanged(0, m_items.size());
     }
 
-    public void onItemClick(int position) {
-        if(selectedItemPositions.contains(position)) {
-            selectedItemPositions.remove(new Integer(position));
-        }
-        else {
-            selectedItemPositions.add(position);
-        }
+    public void onItemClick(TaskRecyclerViewHolder holder, int position) {
+//        if(selectedItemPositions.contains(position)) {
+//            selectedItemPositions.remove(new Integer(position));
+//        }
+//        else {
+//            selectedItemPositions.add(position);
+//        }
+        manipulateDependingOnSelection(holder, position);
     }
 
     private void resetSelected() {
         for(int i = 0; i < selectedItemPositions.size(); ++i) {
             int position = selectedItemPositions.get(i);
             TaskItem item = m_items.get(position);
-            item.isItemSelected = false;
+            //item.isItemSelected = false;
             notifyItemChanged(position);
         }
         selectedItemPositions.clear();
@@ -89,6 +90,29 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
 
     private void changeSelectingStatus(int position, boolean status) {
         TaskItem item = m_items.get(position);
-        item.isItemSelected = status
+        //item.isItemSelected = status
+    }
+
+    public boolean isItemSelected(int position) {
+        return selectedItemPositions.contains(position);
+    }
+
+    //calling from Holder
+    //why bool param?
+    private void manipulateDependingOnSelection(TaskRecyclerViewHolder holder, int itemPosition) {
+        boolean newStatus;
+        if(selectedItemPositions.contains(itemPosition)) {
+            newStatus = false;
+
+            //int taskIndex = selectedItemPositions.get(new Integer(itemPosition));
+            selectedItemPositions.remove(new Integer((itemPosition))); //remove itemIndex from selected
+        }
+        else {
+            newStatus = true;
+
+            selectedItemPositions.add(itemPosition);
+        }
+
+        holder.changeItemSelectionStatus(newStatus);
     }
 }

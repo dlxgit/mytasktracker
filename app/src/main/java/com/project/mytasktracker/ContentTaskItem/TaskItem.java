@@ -8,7 +8,7 @@ public class TaskItem {
     String name;
     String description;
     boolean isFinished;
-    boolean isItemSelected = false;
+
     int priority;
 
     Date deadline;
