@@ -13,19 +13,16 @@ import com.project.mytasktracker.R;
 
 public class TaskRecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     View root;
-
     TextView name;
 
     int position;
     TaskRecyclerViewAdapter adapter;
-    NavigationDrawerActivity activity;
 
     public TaskRecyclerViewHolder(View root, Activity activity, TaskRecyclerViewAdapter adapter) {
         super(root);
         this.root = root;
         root.setOnClickListener(this);
         this.adapter = adapter;
-        this.activity = (NavigationDrawerActivity) activity;
         name = (TextView) root.findViewById(R.id.content_task_item_text);
     }
 
@@ -39,7 +36,6 @@ public class TaskRecyclerViewHolder extends RecyclerView.ViewHolder implements V
     @Override
     public void onClick(View view) {
         adapter.onItemClick(this, position);
-        activity.onTaskSelect(position);
         //root.setBackgroundColor(Color.GREEN);
     }
 

@@ -57,7 +57,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         this.drawer = (DrawerLayout) findViewById(R.id.drawer_root_layout);
-        
+
         addTaskFab = (FloatingActionButton) findViewById(R.id.fab);
         addTaskFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,11 +106,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
         contentRecyclerView.setLayoutManager(contentLayoutManager);
 
         bottomTaskEditLayout = (LinearLayout) findViewById(R.id.task_select_bottom_root);
-
-
-        //contentRecyclerView.
-
-
     }
 
     @Override
@@ -197,30 +192,34 @@ public class NavigationDrawerActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
     }
 
-    public void onTaskSelect(int position) {
 
-        if(!isActionSelectMode) {
-            onSelectionModeBegin();
-        }
+//    public void onTaskSelect() {
+//
+//        if(contentRecyclerViewAdapter.isSelectedListEmpty() && isActionSelectMode) {
+//            onSelectionModeEnd();
+//        }
+//        else if(!isActionSelectMode) {
+//            onSelectionModeBegin();
+//        }
+//
+//        System.out.println("OnTaskSelect()");
+//
+//        //
+//        return;
+//        /*if(!isActionSelectMode) {
+//            isActionSelectMode = true;
+//            toolbar.getMenu().clear();
+//            toolbar.inflateMenu(R.menu.main_menu_tools);
+//            selectedItemsHeader.setVisibility(View.VISIBLE);
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        }
+//        */
+//    }
 
-
-        System.out.println("OnTaskSelect()");
-
-        //
-        return;
-        /*if(!isActionSelectMode) {
-            isActionSelectMode = true;
-            toolbar.getMenu().clear();
-            toolbar.inflateMenu(R.menu.main_menu_tools);
-            selectedItemsHeader.setVisibility(View.VISIBLE);
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
-        */
-    }
 
     //ItemTouchHelper
 
-    private void onSelectionModeBegin() {
+    public void onSelectionModeBegin() {
         isActionSelectMode = true;
         bottomTaskEditLayout.setVisibility(View.VISIBLE);
         addTaskFab.setVisibility(View.GONE);
@@ -229,12 +228,12 @@ public class NavigationDrawerActivity extends AppCompatActivity
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
-    private void onSelectionModeEnd() {
+    public void onSelectionModeEnd() {
         isActionSelectMode = false;
         bottomTaskEditLayout.setVisibility(View.GONE);
         addTaskFab.setVisibility(View.VISIBLE);
         contentRecyclerViewAdapter.setSelectionMode(false);
-        contentRecyclerViewAdapter.notifyAllChanged();
+        //contentRecyclerViewAdapter.notifyAllChanged();
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.project.mytasktracker.NavigationDrawerActivity;
 import com.project.mytasktracker.R;
 
 import java.util.ArrayList;
@@ -16,12 +17,10 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
     ArrayList<TaskItem> m_items;
     private ArrayList<Integer> selectedItemPositions;
 
-    Activity activity;
-
-    boolean isSelectionMode = false;
+    NavigationDrawerActivity activity;
 
     public TaskRecyclerViewAdapter(Activity activity, ArrayList<TaskItem> m_items) {
-        this.activity = activity;
+        this.activity = (NavigationDrawerActivity) activity;
         layoutInflater = LayoutInflater.from(activity);
         this.m_items = m_items;
         selectedItemPositions = new ArrayList<>();
@@ -35,12 +34,7 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
 
     @Override
     public void onBindViewHolder(TaskRecyclerViewHolder holder, int position) {
-        //if(isSelectionMode) {
         holder.bindData(m_items.get(position), position);
-        //}
-        //else {
-        //    holder.bindData(m_items.get(position), position);
-        //}
     }
 
     @Override
@@ -54,8 +48,7 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
     }
 
     public void setSelectionMode(boolean selectionMode) {
-        isSelectionMode = selectionMode;
-        if(!isSelectionMode) {
+        if(!selectionMode) {
             resetSelected();
             //notifyAllChanged();
         }
@@ -70,6 +63,7 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
 
     public void onItemClick(TaskRecyclerViewHolder holder, int position) {
         manipulateDependingOnSelection(holder, position);
+        //activity.onTaskSelect(position);
     }
 
     private void resetSelected() {
@@ -93,19 +87,27 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
 
     //calling from Holder
     private void manipulateDependingOnSelection(TaskRecyclerViewHolder holder, int itemPosition) {
-        boolean newStatus;
-        if(isItemSelected(itemPosition)) {
-            newStatus = false;
+        //changing status
 
-            //int taskIndex = selectedItemPositions.get(new Integer(itemPosition));
-            selectedItemPositions.remove(new Integer((itemPosition))); //remove itemIndex from selected
+        boolean isSelected = !isItemSelected(itemPosition);
+        holder.changeItemSelectionStatus(isSelected); //oldStatus
+
+        if(isSelected) {
+            selectedItemPositions.add(itemPosition);
+            if(selectedItemPositions.size() == 1) {
+                activity.onSelectionModeBegin();
+            }
         }
         else {
-            newStatus = true;
-
-            selectedItemPositions.add(itemPosition);
+            selectedItemPositions.remove(new Integer((itemPosition))); //remove itemIndex from selected
+            if(selectedItemPositions.isEmpty()) {
+                activity.onSelectionModeEnd();
+                return;
+            }
         }
+    }
 
-        holder.changeItemSelectionStatus(newStatus);
+    public boolean isSelectedListEmpty() {
+        return selectedItemPositions.isEmpty();
     }
 }
