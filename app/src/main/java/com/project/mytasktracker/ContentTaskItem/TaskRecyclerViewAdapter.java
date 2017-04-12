@@ -19,6 +19,8 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
 
     NavigationDrawerActivity activity;
 
+    boolean isRebindingPosition = false;
+
     public TaskRecyclerViewAdapter(Activity activity, ArrayList<TaskItem> m_items) {
         this.activity = (NavigationDrawerActivity) activity;
         layoutInflater = LayoutInflater.from(activity);
@@ -34,7 +36,13 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
 
     @Override
     public void onBindViewHolder(TaskRecyclerViewHolder holder, int position) {
-        holder.bindData(m_items.get(position), position);
+
+        if(!isRebindingPosition) {
+            holder.bindData(m_items.get(position), position);
+        }
+        else {
+            holder.bindPosition(position);
+        }
     }
 
     @Override
@@ -109,5 +117,36 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
 
     public boolean isSelectedListEmpty() {
         return selectedItemPositions.isEmpty();
+    }
+
+    public void doMarkAsDoneSelected() {
+        deleteAllSelected();
+    }
+    public void doEditSelected() {
+
+    }
+    public void doEditDateSelected() {
+
+    }
+    public void doEditCommentSelected() {
+
+    }
+    public void doEditReminder() {
+
+    }
+
+    private void deleteSelectedItem(int position) { //position = index of element in selectedItemsList
+        int indexOfItem = selectedItemPositions.remove(position);
+        m_items.remove(indexOfItem);
+        notifyItemRemoved(indexOfItem);
+        //notifyItemRangeChanged(position,);
+    }
+
+    private void deleteAllSelected() {
+        this.isRebindingPosition = true;
+        for(;!selectedItemPositions.isEmpty();) {
+            deleteSelectedItem(0);
+        }
+        this.isRebindingPosition = false;
     }
 }

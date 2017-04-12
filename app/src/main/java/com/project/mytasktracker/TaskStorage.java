@@ -9,6 +9,8 @@ import java.util.HashMap;
 
 public class TaskStorage {
     HashMap<String, ArrayList<TaskItem>> hashMap;
+    //today
+    //next7days
 
     public TaskStorage(ArrayList<String> folders) {
         hashMap = new HashMap<String, ArrayList<TaskItem>>();

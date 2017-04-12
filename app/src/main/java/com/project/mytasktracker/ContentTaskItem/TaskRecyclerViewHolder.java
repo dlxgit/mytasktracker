@@ -33,10 +33,13 @@ public class TaskRecyclerViewHolder extends RecyclerView.ViewHolder implements V
         root.setBackgroundColor(0);
     }
 
+    public void bindPosition(int position) {
+        this.position = position;
+    }
+
     @Override
     public void onClick(View view) {
         adapter.onItemClick(this, position);
-        //root.setBackgroundColor(Color.GREEN);
     }
 
     public void changeItemSelectionStatus(boolean isSelected) {
@@ -47,5 +50,6 @@ public class TaskRecyclerViewHolder extends RecyclerView.ViewHolder implements V
             root.setBackgroundColor(0);
         }
     }
+
 
 }

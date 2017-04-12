@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,7 +30,14 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     private RecyclerView menuRecyclerView;
     private FolderRecyclerViewAdapter menuRecyclerViewAdapter;
+
     private LinearLayout bottomTaskEditLayout;
+    private ImageView bottomImageViewDone;
+    private ImageView bottomImageViewDate;
+    private ImageView bottomImageViewEdit;
+    private ImageView bottomImageViewComment;
+    private ImageView bottomImageViewReminder;
+
 
     FloatingActionButton addTaskFab;
 
@@ -106,6 +114,44 @@ public class NavigationDrawerActivity extends AppCompatActivity
         contentRecyclerView.setLayoutManager(contentLayoutManager);
 
         bottomTaskEditLayout = (LinearLayout) findViewById(R.id.task_select_bottom_root);
+        bottomImageViewDone = (ImageView) findViewById(R.id.task_select_bottom_icon_done);
+        bottomImageViewDate = (ImageView) findViewById(R.id.task_select_bottom_icon_date);
+        bottomImageViewEdit = (ImageView) findViewById(R.id.task_select_bottom_icon_edit);
+        bottomImageViewComment = (ImageView) findViewById(R.id.task_select_bottom_icon_message);
+        bottomImageViewReminder = (ImageView) findViewById(R.id.task_select_bottom_icon_alarm);
+
+
+        bottomImageViewDone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onTaskDone();
+            }
+        });
+        bottomImageViewDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onTaskDateEdit();
+            }
+        });
+        bottomImageViewEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onTaskEdit();
+            }
+        });
+        bottomImageViewComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onTaskCommentEdit();
+            }
+        });
+        bottomImageViewReminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onTaskReminderEdit();
+            }
+        });
+
     }
 
     @Override
@@ -236,4 +282,33 @@ public class NavigationDrawerActivity extends AppCompatActivity
         //contentRecyclerViewAdapter.notifyAllChanged();
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
+
+
+    //bottom bar functions
+    public void onTaskDone() {
+        contentRecyclerViewAdapter.doMarkAsDoneSelected();
+        onSelectionModeEnd();
+    }
+    public void onTaskDateEdit() {
+        contentRecyclerViewAdapter.doEditDateSelected();
+        onSelectionModeEnd();
+    }
+    public void onTaskEdit() {
+        contentRecyclerViewAdapter.doEditSelected();
+        onSelectionModeEnd();
+    }
+    public void onTaskCommentEdit() {
+        contentRecyclerViewAdapter.doEditCommentSelected();
+        onSelectionModeEnd();
+    }
+    public void onTaskReminderEdit() {
+        contentRecyclerViewAdapter.doEditReminder();
+        onSelectionModeEnd();
+
+
+        //contentRecyclerViewAdapter.bindViewHolder(contentRecyclerView.get);
+    }
+
+
+
 }
