@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerViewHolder> {
     LayoutInflater layoutInflater;
     ArrayList<TaskItem> m_items;
-    private ArrayList<Integer> selectedItemPositions;
+    private ArrayList<TaskItem> selectedItems;
 
     NavigationDrawerActivity activity;
 
@@ -25,7 +25,7 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
         this.activity = (NavigationDrawerActivity) activity;
         layoutInflater = LayoutInflater.from(activity);
         this.m_items = m_items;
-        selectedItemPositions = new ArrayList<>();
+        selectedItems = new ArrayList<>();
     }
 
     @Override
@@ -69,19 +69,19 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
         notifyItemRangeChanged(0, m_items.size());
     }
 
-    public void onItemClick(TaskRecyclerViewHolder holder, int position) {
-        manipulateDependingOnSelection(holder, position);
+    public void onItemClick(TaskRecyclerViewHolder holder) {
+        manipulateDependingOnSelection(holder);
         //activity.onTaskSelect(position);
     }
 
     private void resetSelected() {
-        for(int i = 0; i < selectedItemPositions.size(); ++i) {
-            int position = selectedItemPositions.get(i);
+        for(int i = 0; i < selectedItems.size(); ++i) {
+            int position = m_items.indexOf(selectedItems.get(i));
             TaskItem item = m_items.get(position);
             //item.isItemSelected = false;
             notifyItemChanged(position);
         }
-        selectedItemPositions.clear();
+        selectedItems.clear();
     }
 
     private void changeSelectingStatus(int position, boolean status) {
@@ -89,26 +89,28 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
         //item.isItemSelected = status
     }
 
-    public boolean isItemSelected(int position) {
-        return selectedItemPositions.contains(position);
+    public boolean isItemSelected(TaskItem item) {
+        return selectedItems.contains(item);
     }
 
     //calling from Holder
-    private void manipulateDependingOnSelection(TaskRecyclerViewHolder holder, int itemPosition) {
+    private void manipulateDependingOnSelection(TaskRecyclerViewHolder holder) {
         //changing status
+        TaskItem item = holder.getData();
+        //int itemPosition = m_items.indexOf(item);
 
-        boolean isSelected = !isItemSelected(itemPosition);
+        boolean isSelected = !isItemSelected(item);
         holder.changeItemSelectionStatus(isSelected); //oldStatus
 
         if(isSelected) {
-            selectedItemPositions.add(itemPosition);
-            if(selectedItemPositions.size() == 1) {
+            selectedItems.add(item);
+            if(selectedItems.size() == 1) {
                 activity.onSelectionModeBegin();
             }
         }
         else {
-            selectedItemPositions.remove(new Integer((itemPosition))); //remove itemIndex from selected
-            if(selectedItemPositions.isEmpty()) {
+            selectedItems.remove(item); //remove item from selected
+            if(selectedItems.isEmpty()) {
                 activity.onSelectionModeEnd();
                 return;
             }
@@ -116,7 +118,7 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
     }
 
     public boolean isSelectedListEmpty() {
-        return selectedItemPositions.isEmpty();
+        return selectedItems.isEmpty();
     }
 
     public void doMarkAsDoneSelected() {
@@ -135,17 +137,18 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
 
     }
 
-    private void deleteSelectedItem(int position) { //position = index of element in selectedItemsList
-        int indexOfItem = selectedItemPositions.remove(position);
-        m_items.remove(indexOfItem);
-        notifyItemRemoved(indexOfItem);
+    private void deleteSelectedItem(TaskItem item) { //position = index of element in selectedItemsList
+        selectedItems.remove(item);
+        int index = m_items.indexOf(item);
+        m_items.remove(index);
+        notifyItemRemoved(index);
         //notifyItemRangeChanged(position,);
     }
 
     private void deleteAllSelected() {
         this.isRebindingPosition = true;
-        for(;!selectedItemPositions.isEmpty();) {
-            deleteSelectedItem(0);
+        for(;!selectedItems.isEmpty();) {
+            deleteSelectedItem(selectedItems.get(0));
         }
         this.isRebindingPosition = false;
     }

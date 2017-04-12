@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.project.mytasktracker.NavigationDrawerActivity;
 import com.project.mytasktracker.R;
 
 
@@ -16,6 +15,7 @@ public class TaskRecyclerViewHolder extends RecyclerView.ViewHolder implements V
     TextView name;
 
     int position;
+    TaskItem taskItem;
     TaskRecyclerViewAdapter adapter;
 
     public TaskRecyclerViewHolder(View root, Activity activity, TaskRecyclerViewAdapter adapter) {
@@ -27,6 +27,7 @@ public class TaskRecyclerViewHolder extends RecyclerView.ViewHolder implements V
     }
 
     public void bindData(TaskItem taskItem, int position) {
+        this.taskItem = taskItem;
         CharSequence cs = (CharSequence)taskItem.getName();
         name.setText(cs);
         this.position = position;
@@ -39,8 +40,9 @@ public class TaskRecyclerViewHolder extends RecyclerView.ViewHolder implements V
 
     @Override
     public void onClick(View view) {
-        adapter.onItemClick(this, position);
+        adapter.onItemClick(this);
     }
+
 
     public void changeItemSelectionStatus(boolean isSelected) {
         if(isSelected) {
@@ -49,6 +51,10 @@ public class TaskRecyclerViewHolder extends RecyclerView.ViewHolder implements V
         else {
             root.setBackgroundColor(0);
         }
+    }
+
+    public TaskItem getData(){
+        return taskItem;
     }
 
 
