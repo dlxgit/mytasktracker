@@ -62,6 +62,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private TextView selectedItemsHeader;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -291,6 +292,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
         contentRecyclerViewAdapter.doMarkAsDoneSelected();
         onSelectionModeEnd();
     }
+
     public void onTaskDateEdit() {
         Fragment fragment = new DatePickingFragment();
         FragmentManager fm = getSupportFragmentManager();
@@ -309,6 +311,18 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     public void onTaskEdit() {
         contentRecyclerViewAdapter.doEditSelected();
+
+
+
+        if(contentRecyclerViewAdapter.isAnySelected()) {
+            TaskItem it = contentRecyclerViewAdapter.getFirstSelected();
+
+            Intent intent = it.toIntent();
+            intent.setClass(this, EditTaskActivity.class);
+            startActivityForResult(intent, RESULT_OK);
+            //TODO: edit
+
+        }
         onSelectionModeEnd();
     }
 
@@ -322,6 +336,18 @@ public class NavigationDrawerActivity extends AppCompatActivity
         onSelectionModeEnd();
 
         //contentRecyclerViewAdapter.bindViewHolder(contentRecyclerView.get);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == RESULT_OK) {
+            System.out.println("ActivityResulOK");
+        }
+        else if (resultCode == RESULT_CANCELED) {
+            int abc = 3;
+        }
     }
 
     @Override

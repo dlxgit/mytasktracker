@@ -152,4 +152,12 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
         }
         this.isRebindingPosition = false;
     }
+
+    public boolean isAnySelected() {
+        return !selectedItems.isEmpty();
+    }
+    //TODO: edit soon
+    public TaskItem getFirstSelected() {
+        return selectedItems.get(0);
+    }
 }

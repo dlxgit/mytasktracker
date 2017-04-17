@@ -1,5 +1,7 @@
 package com.project.mytasktracker.ContentTaskItem;
 
+import android.content.Intent;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -8,14 +10,12 @@ public class TaskItem {
     String name;
     String description;
     boolean isFinished;
-
     int priority;
-
     Date deadline;
 
     ArrayList<String> labels;
-
     ArrayList<Date> reminders;
+    ArrayList<String> photos;
 
     public TaskItem(String name, String description, int priority) {
         this.name = name;
@@ -23,6 +23,32 @@ public class TaskItem {
         this.priority = priority;
         this.isFinished = false;
 
+        this.deadline = new Date();
+        this.photos = new ArrayList<>();
+        this.labels = new ArrayList<>();
+        this.reminders = new ArrayList<>();
+    }
+
+    public Intent toIntent() {
+        Intent intent = new Intent();
+
+        intent.putExtra("header", name);
+        intent.putExtra("description", description);
+        intent.putExtra("date", deadline);
+        intent.putExtra("priority", String.valueOf(priority));
+        intent.putExtra("labels", labels);
+        intent.putExtra("reminders", getRemindersAsStrings());
+        intent.putExtra("photos", photos);
+
+        return intent;
+    }
+
+    private ArrayList<String> getRemindersAsStrings() {
+        ArrayList<String> result = new ArrayList<>();
+        for(Date date : reminders) {
+            result.add(date.toString());
+        }
+        return result;
     }
 
     public String getName() {
