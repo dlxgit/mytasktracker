@@ -12,17 +12,19 @@
 
     <include
         layout="@layout/toolbar_main"></include>
-    <TextView
-        android:id="@+id/content_nav_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Content"/>
+
     <android.support.v7.widget.RecyclerView
-        android:layout_below="@id/content_nav_textView"
         android:id="@+id/content_tasks_recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
     </android.support.v7.widget.RecyclerView>
 
     <include layout="@layout/task_select_bottom_menu"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/date_fragment_container">
+
+    </FrameLayout>
 </RelativeLayout>

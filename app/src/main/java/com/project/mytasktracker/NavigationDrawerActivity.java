@@ -1,8 +1,13 @@
 package com.project.mytasktracker;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -20,13 +25,14 @@ import android.widget.TextView;
 
 import com.project.mytasktracker.ContentTaskItem.TaskItem;
 import com.project.mytasktracker.ContentTaskItem.TaskRecyclerViewAdapter;
+import com.project.mytasktracker.DatePicking.DatePickingFragment;
 import com.project.mytasktracker.MenuFolderItem.FolderRecyclerViewAdapter;
 import com.project.mytasktracker.MenuFolderItem.TaskFolderItem;
 
 import java.util.ArrayList;
 
 public class NavigationDrawerActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, DatePickingFragment.OnFragmentInteractionListener {
 
     private RecyclerView menuRecyclerView;
     private FolderRecyclerViewAdapter menuRecyclerViewAdapter;
@@ -38,9 +44,7 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private ImageView bottomImageViewComment;
     private ImageView bottomImageViewReminder;
 
-
     FloatingActionButton addTaskFab;
-
 
     private RecyclerView contentRecyclerView;
     private TaskRecyclerViewAdapter contentRecyclerViewAdapter;
@@ -57,12 +61,15 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     private TextView selectedItemsHeader;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation_drawer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         this.drawer = (DrawerLayout) findViewById(R.id.drawer_root_layout);
 
@@ -151,7 +158,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
                 onTaskReminderEdit();
             }
         });
-
     }
 
     @Override
@@ -168,8 +174,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
             super.onBackPressed();
             //System.exit(1);
         }
-
-
     }
 
     @Override
@@ -213,7 +217,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
-
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -283,32 +286,46 @@ public class NavigationDrawerActivity extends AppCompatActivity
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
-
     //bottom bar functions
     public void onTaskDone() {
         contentRecyclerViewAdapter.doMarkAsDoneSelected();
         onSelectionModeEnd();
     }
     public void onTaskDateEdit() {
+        Fragment fragment = new DatePickingFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.date_fragment_container, fragment);
+        ft.commit();
+
         contentRecyclerViewAdapter.doEditDateSelected();
         onSelectionModeEnd();
     }
+
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+    }
+
     public void onTaskEdit() {
         contentRecyclerViewAdapter.doEditSelected();
         onSelectionModeEnd();
     }
+
     public void onTaskCommentEdit() {
         contentRecyclerViewAdapter.doEditCommentSelected();
         onSelectionModeEnd();
     }
+
     public void onTaskReminderEdit() {
         contentRecyclerViewAdapter.doEditReminder();
         onSelectionModeEnd();
 
-
         //contentRecyclerViewAdapter.bindViewHolder(contentRecyclerView.get);
     }
 
-
-
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        onTaskDateEdit();
+    }
 }
