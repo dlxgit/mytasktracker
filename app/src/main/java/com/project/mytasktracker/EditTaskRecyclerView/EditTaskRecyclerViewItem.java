@@ -1,7 +1,11 @@
 package com.project.mytasktracker.EditTaskRecyclerView;
 
 
+import android.app.Activity;
+import android.content.res.Resources;
 import android.support.graphics.drawable.VectorDrawableCompat;
+
+import com.project.mytasktracker.R;
 
 public class EditTaskRecyclerViewItem {
 
@@ -19,10 +23,47 @@ public class EditTaskRecyclerViewItem {
     String header;
     String description;
 
+    public EditTaskRecyclerViewItem(ItemType itemType, Activity activity) {
+        Resources resources = activity.getResources();
+        Resources.Theme theme = activity.getTheme();
+
+        switch (itemType) {
+            case DATE:
+                this.image = VectorDrawableCompat.create(resources, R.drawable.ic_vec_date_range_black_24dp, theme);
+                break;
+            case PRIORITY:
+
+                this.image = VectorDrawableCompat.create(resources, R.drawable.ic_vec_priority_high_black_24dp, theme);
+                break;
+            case LABELS:
+
+                this.image = VectorDrawableCompat.create(resources, R.drawable.ic_vec_label_outline_black_24dp, theme);
+                break;
+            case PARENT:
+
+                this.image = VectorDrawableCompat.create(resources, R.drawable.ic_vec_low_priority_black_24dp, theme);
+                break;
+            case COMMENTS:
+
+                this.image = VectorDrawableCompat.create(resources, R.drawable.ic_vec_chat_bubble_outline_black_24dp, theme);
+                break;
+            case PHOTOS:
+
+                this.image = VectorDrawableCompat.create(resources, R.drawable.ic_vec_photo_library_black_24dp, theme);
+                break;
+            case REMINDERS:
+
+                this.image = VectorDrawableCompat.create(resources, R.drawable.ic_vec_notifications_none_black_24dp, theme);
+                break;
+
+
+        }
+    }
+
     public EditTaskRecyclerViewItem(VectorDrawableCompat image, String header, String description) {
-        this.image = image;
         this.header = header;
         this.description = description;
+        this.image = image;
     }
 
     public VectorDrawableCompat getImage() {
@@ -48,4 +89,5 @@ public class EditTaskRecyclerViewItem {
     public void setDescription(String description) {
         this.description = description;
     }
+
 }

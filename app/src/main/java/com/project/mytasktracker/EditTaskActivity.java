@@ -60,13 +60,21 @@ public class EditTaskActivity extends AppCompatActivity {
         recyclerView = (RecyclerView) findViewById(R.id.edit_task_activity_recyclerview);
 
         items = new ArrayList<>();
-        items.add(new EditTaskRecyclerViewItem(VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_date_range_black_24dp, getTheme()), "Due date", "today"));
-        items.add(new EditTaskRecyclerViewItem(VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_priority_high_black_24dp, getTheme()), "Priority", "default_priority"));
-        items.add(new EditTaskRecyclerViewItem(VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_label_outline_black_24dp, getTheme()), "Labels", default_value_labels));
-        items.add(new EditTaskRecyclerViewItem(VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_low_priority_black_24dp, getTheme()), "Parent", default_value_parent));
-        items.add(new EditTaskRecyclerViewItem(VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_chat_bubble_outline_black_24dp, getTheme()), "Comments", default_value_comments));
-        items.add(new EditTaskRecyclerViewItem(VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_photo_library_black_24dp, getTheme()), "Attached photos", default_value_photos));
-        items.add(new EditTaskRecyclerViewItem(VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_notifications_none_black_24dp, getTheme()), "Reminders", default_value_reminders));
+//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.DATE), "Due date", "today"));
+//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.PRIORITY), "Priority", "default_priority"));
+//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.LABELS), "Labels", default_value_labels));
+//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.PARENT), "Parent", default_value_parent));
+//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.COMMENTS), "Comments", default_value_comments));
+//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.PHOTOS), "Attached photos", default_value_photos));
+//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.REMINDERS), "Reminders", default_value_reminders));
+        
+        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.DATE), "Due date", "today"));
+        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.PRIORITY), "Priority", "default_priority"));
+        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.LABELS), "Labels", default_value_labels));
+        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.PARENT), "Parent", default_value_parent));
+        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.COMMENTS), "Comments", default_value_comments));
+        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.PHOTOS), "Attached photos", default_value_photos));
+        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.REMINDERS), "Reminders", default_value_reminders));
 
         adapter = new EditTaskRecyclerViewAdapter(items);
         recyclerView.setAdapter(adapter);
@@ -74,41 +82,6 @@ public class EditTaskActivity extends AppCompatActivity {
 
         //adapter.notifyItemRangeChanged(0, items.size());
         //TaskItem taskItem = TaskItem.fromIntent(getIntent());
-    }
-
-    private VectorDrawableCompat getImageOf(EditTaskRecyclerViewItem.ItemType type) {
-        VectorDrawableCompat result;
-        switch(type) {
-            case DATE:
-                result = VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_date_range_black_24dp, getTheme());
-                break;
-            case PRIORITY:
-
-                result = VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_priority_high_black_24dp, getTheme());
-                break;
-            case LABELS:
-
-                result = VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_label_outline_black_24dp, getTheme());
-                break;
-            case PARENT:
-
-                result = VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_low_priority_black_24dp, getTheme());
-                break;
-            case COMMENTS:
-
-                result = VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_chat_bubble_outline_black_24dp, getTheme());
-                break;
-            case PHOTOS:
-
-                result = VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_photo_library_black_24dp, getTheme());
-                break;
-            case REMINDERS:
-
-                result = VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_notifications_none_black_24dp, getTheme());
-                break;
-        }
-
-        return result;
     }
 
 
