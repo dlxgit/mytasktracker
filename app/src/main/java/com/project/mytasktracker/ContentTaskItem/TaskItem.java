@@ -1,9 +1,14 @@
 package com.project.mytasktracker.ContentTaskItem;
 
 import android.content.Intent;
+import android.os.Bundle;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class TaskItem {
@@ -16,6 +21,15 @@ public class TaskItem {
     ArrayList<String> labels;
     ArrayList<Date> reminders;
     ArrayList<String> photos;
+
+    public TaskItem() {
+        this.name = new String();
+        this.description = new String();
+        this.deadline = new Date();
+        this.labels = new ArrayList<>();
+        this.reminders = new ArrayList<>();
+        this.photos = new ArrayList<>();
+    }
 
     public TaskItem(String name, String description, int priority) {
         this.name = name;
@@ -43,12 +57,63 @@ public class TaskItem {
         return intent;
     }
 
+    public TaskItem(Intent intent) {
+
+        Bundle extras = intent.getExtras();
+
+        if (extras.containsKey("header")) {
+
+            Date date = new Date();
+            DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
+            try {
+                this.deadline = format.parse(intent.getStringExtra("date"));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                ArrayList<String> strings = new ArrayList<>();
+                this.reminders = new ArrayList<>();
+                strings = intent.getStringArrayListExtra("reminders");
+                for(String str : strings) {
+                    this.reminders.add(format.parse(str));
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            ArrayList<String> strings = new ArrayList<>();
+            this.reminders = new ArrayList<>();
+            this.labels = intent.getStringArrayListExtra("labels");
+
+            //this.photos = intent.getStringExtra("photos");
+        }
+
+        this.name = intent.getStringExtra("header");
+        this.description = intent.getStringExtra("description");
+        this.priority = Integer.parseInt(intent.getStringExtra("priority"));
+
+        this.deadline = new Date();
+        this.photos = new ArrayList<>();
+        this.labels = new ArrayList<>();
+        this.reminders = new ArrayList<>();
+    }
+
+
     private ArrayList<String> getRemindersAsStrings() {
         ArrayList<String> result = new ArrayList<>();
         for(Date date : reminders) {
             result.add(date.toString());
         }
         return result;
+    }
+
+    public ArrayList<String> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(ArrayList<String> photos) {
+        this.photos = photos;
     }
 
     public String getName() {

@@ -312,8 +312,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
     public void onTaskEdit() {
         contentRecyclerViewAdapter.doEditSelected();
 
-
-
         if(contentRecyclerViewAdapter.isAnySelected()) {
             TaskItem it = contentRecyclerViewAdapter.getFirstSelected();
 
