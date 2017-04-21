@@ -33,10 +33,10 @@ public class LabelsDialogFragment extends DialogFragment {
         getDialog().setTitle("Title");
         View v = inflater.inflate(R.layout.dialogfragment_labels, null);
         //init children of v
-        final EditText editText = (EditText) v.findViewById(R.id.dialogfragment_edittext);
+        final EditText editText = (EditText) v.findViewById(R.id.dialogfragment_labels_edittext);
 
-        Button cancelBtn = (Button) v.findViewById(R.id.dialogfragment_cancelbtn);
-        Button applyBtn = (Button) v.findViewById(R.id.dialogfragment_applybtn);
+        Button cancelBtn = (Button) v.findViewById(R.id.dialogfragment_labels_cancelbtn);
+        Button applyBtn = (Button) v.findViewById(R.id.dialogfragment_labels_applybtn);
         cancelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

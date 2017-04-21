@@ -15,7 +15,7 @@ import com.project.mytasktracker.R;
 import java.util.ArrayList;
 
 
-public class PriorityDialogFragment extends DialogFragment{
+public class ParentDialogFragment extends DialogFragment{
     public interface OnDialogResultListener {
         void onDialogResult(int priority);
     }
@@ -23,11 +23,11 @@ public class PriorityDialogFragment extends DialogFragment{
     OnDialogResultListener listener;
 
     ListView listView;
-    PriorityListViewAdapter adapter;
+    ParentListViewAdapter adapter;
 
     TaskItem item;
 
-    public PriorityDialogFragment(TaskItem item, OnDialogResultListener listener) {
+    public ParentDialogFragment(TaskItem item, OnDialogResultListener listener) {
         this.item = item;
         this.listener = listener;
     }
@@ -39,11 +39,11 @@ public class PriorityDialogFragment extends DialogFragment{
         View v = inflater.inflate(R.layout.fragment_priority, null);
         //init children of v
 
-        listView = (ListView) v.findViewById(R.id.priority_fragment_listview);
+        listView = (ListView) v.findViewById(R.id.dialogfragment_parent_listview);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                item.setPriority(adapter.items.get(position).getValue());
+                //item.setParent(adapter.items.get(position).getValue());
                 dismiss();
                 listener.onDialogResult(item.getPriority());
             }
@@ -56,10 +56,10 @@ public class PriorityDialogFragment extends DialogFragment{
     }
 
     public void initAdapter() {
-        ArrayList<PriorityItem> priorityItems = new ArrayList<>();
+        ArrayList<ParentItem> parentItems = new ArrayList<>();
         for(int i = 4; i > 0; --i) {
-            priorityItems.add(new PriorityItem(i));
+            parentItems.add(new ParentItem(i));
         }
-        adapter = new PriorityListViewAdapter(priorityItems, this, listView );
+        adapter = new ParentListViewAdapter(parentItems, this, listView );
     }
 }

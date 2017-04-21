@@ -19,6 +19,8 @@ public class TaskItem {
     int priority;
     Date deadline;
 
+    TaskItem parent;
+
     ArrayList<String> labels;
     ArrayList<Date> reminders;
     ArrayList<String> photos;
@@ -104,6 +106,14 @@ public class TaskItem {
         this.photos = new ArrayList<>();
         this.labels = new ArrayList<>();
         this.reminders = new ArrayList<>();
+    }
+
+    public TaskItem getParent() {
+        return parent;
+    }
+
+    public void setParent(TaskItem parent) {
+        this.parent = parent;
     }
 
 

@@ -13,13 +13,13 @@ import com.project.mytasktracker.R;
 import java.util.ArrayList;
 
 
-public class PriorityListViewAdapter extends BaseAdapter{
+public class ParentListViewAdapter extends BaseAdapter{
 
-    ArrayList<PriorityItem> items;
+    ArrayList<ParentItem> items;
     DialogFragment fragment;
     LayoutInflater inflater;
 
-    public PriorityListViewAdapter(ArrayList<PriorityItem> items, DialogFragment fragment, ListView listView) {
+    public ParentListViewAdapter(ArrayList<ParentItem> items, DialogFragment fragment, ListView listView) {
         this.items = items;
         this.fragment = fragment;
 
@@ -32,7 +32,7 @@ public class PriorityListViewAdapter extends BaseAdapter{
     }
 
     @Override
-    public PriorityItem getItem(int position) {
+    public ParentItem getItem(int position) {
         return items.get(position);
     }
 
