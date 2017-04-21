@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
 
 
 public class TaskItem {
@@ -37,7 +38,7 @@ public class TaskItem {
         this.priority = priority;
         this.isFinished = false;
 
-        this.deadline = new Date();
+        this.deadline = new Date(1,1,1);
         this.photos = new ArrayList<>();
         this.labels = new ArrayList<>();
         this.reminders = new ArrayList<>();
@@ -65,11 +66,17 @@ public class TaskItem {
 
             Date date = new Date();
             DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
-            try {
-                this.deadline = format.parse(intent.getStringExtra("date"));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            //try {
+                String strr = intent.getStringExtra("date");
+                //this.deadline = format.parse(str);
+                this.deadline = new Date(222222);
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//            }
+//            catch (){
+//
+//            }
 
             try {
                 ArrayList<String> strings = new ArrayList<>();

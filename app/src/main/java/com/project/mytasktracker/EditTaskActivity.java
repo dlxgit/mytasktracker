@@ -1,40 +1,33 @@
 package com.project.mytasktracker;
 
-import android.graphics.BitmapFactory;
 import android.support.design.widget.FloatingActionButton;
 import android.support.graphics.drawable.VectorDrawableCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.project.mytasktracker.ContentTaskItem.TaskItem;
-import com.project.mytasktracker.DatePicking.DatePickingFragment;
 import com.project.mytasktracker.EditTaskRecyclerView.EditTaskRecyclerViewAdapter;
 import com.project.mytasktracker.EditTaskRecyclerView.EditTaskRecyclerViewItem;
 import com.project.mytasktracker.Fragments.Priority.PriorityDialogFragment;
-import com.project.mytasktracker.Fragments.Priority.PriorityFragment;
 
 import java.util.ArrayList;
 
 
-public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyclerViewAdapter.OnListItemSelectCallback {
+public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyclerViewAdapter.OnListItemSelectCallback, PriorityDialogFragment.OnDialogResultListener {
 
     String default_value_labels = "No label";
     String default_value_parent = "No parent";
     String default_value_comments = "No comments";
     String default_value_photos = "No photos";
     String default_value_reminders = "No reminders";
+
+
 
     FloatingActionButton fab;
     EditText editTextTask;
@@ -45,10 +38,14 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyc
 
     ArrayList<EditTaskRecyclerViewItem> items;
 
+    TaskItem taskitem;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_task);
+
+        taskitem = new TaskItem(getIntent());
 
         fab = (FloatingActionButton) findViewById(R.id.edit_task_activity_fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +101,7 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyc
 
         //adapter.notifyItemRangeChanged(0, items.size());
         //TaskItem taskItem = TaskItem.fromIntent(getIntent());
+
     }
 
     public void onListItemSelect(EditTaskRecyclerViewItem.ItemType type) {
@@ -117,7 +115,8 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyc
 //                FragmentTransaction ft = fm.beginTransaction();
 //                ft.add(R.id.edit_task_activity_root, fragment);
 //                ft.commit();
-                new PriorityDialogFragment().show(getSupportFragmentManager(), "dialog-priority");
+                DialogFragment dialogFragment = new PriorityDialogFragment(taskitem, this);
+                dialogFragment.show(getSupportFragmentManager(), "dialog-priority");
 
                 break;
             case LABELS:
@@ -138,4 +137,9 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyc
         onListItemSelect(type);
     }
 
+    @Override
+    public void onDialogResult(int priority) {
+        adapter.getItem(EditTaskRecyclerViewItem.ItemType.PRIORITY).setDescription("Priority " + priority);
+        adapter.notifyDataSetChanged();
+    }
 }

@@ -3,12 +3,13 @@ package com.project.mytasktracker.Fragments.Priority;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.project.mytasktracker.ContentTaskItem.TaskItem;
 import com.project.mytasktracker.R;
 
 import java.util.ArrayList;
@@ -17,9 +18,22 @@ import java.util.ArrayList;
  * Created by Andrey on 21.04.2017.
  */
 
-public class PriorityDialogFragment extends DialogFragment {
+public class PriorityDialogFragment extends DialogFragment{
+    public interface OnDialogResultListener {
+        void onDialogResult(int priority);
+    }
+
+    OnDialogResultListener listener;
+
     ListView listView;
     PriorityListViewAdapter adapter;
+
+    TaskItem item;
+
+    public PriorityDialogFragment(TaskItem item, OnDialogResultListener listener) {
+        this.item = item;
+        this.listener = listener;
+    }
 
     @Nullable
     @Override
@@ -29,6 +43,14 @@ public class PriorityDialogFragment extends DialogFragment {
         //init children of v
 
         listView = (ListView) v.findViewById(R.id.priority_fragment_listview);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                item.setPriority(adapter.items.get(position).getValue());
+                dismiss();
+                listener.onDialogResult(item.getPriority());
+            }
+        });
         initAdapter();
         listView.setAdapter(adapter);
 

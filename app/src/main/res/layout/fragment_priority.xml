@@ -4,11 +4,12 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    tools:context="com.project.mytasktracker.Fragments.Priority.PriorityFragment"
+
     android:layout_gravity="center"
     android:gravity="center"
-    android:background="#00FF00">
+    android:background="#A3A3">
 
+    <!--tools:context="com.project.mytasktracker.Fragments.Priority.PriorityFragment"-->
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/priority_fragment_textview"
@@ -20,9 +21,8 @@
     <ListView
         android:id="@+id/priority_fragment_listview"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"/>
 
-    </ListView>
     <Button
         android:id="@+id/priority_fragment_button_cancel"
         android:layout_width="wrap_content"

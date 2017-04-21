@@ -1,6 +1,7 @@
 package com.project.mytasktracker.Fragments.Priority;
 
 import android.app.Activity;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,20 +18,19 @@ import java.util.ArrayList;
 public class PriorityListViewAdapter extends BaseAdapter{
 
     ArrayList<PriorityItem> items;
-    Fragment fragment;
+    DialogFragment fragment;
     LayoutInflater inflater;
 
-    public PriorityListViewAdapter(ArrayList<PriorityItem> items, Fragment fragment, ListView listView) {
+    public PriorityListViewAdapter(ArrayList<PriorityItem> items, DialogFragment fragment, ListView listView) {
         this.items = items;
         this.fragment = fragment;
 
         inflater = LayoutInflater.from(fragment.getContext());
-
     }
 
     @Override
     public int getCount() {
-        return 0;
+        return items.size();
     }
 
     @Override
@@ -46,11 +46,11 @@ public class PriorityListViewAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView == null) {
-
+            convertView = inflater.inflate(R.layout.priority_fragment_listview_item, parent, false);
         }
-        convertView = inflater.inflate(R.layout.priority_fragment_listview_item, null);
+        //convertView = inflater.inflate(R.layout.priority_fragment_listview_item, null);
         TextView textView = (TextView) convertView.findViewById(R.id.priority_fragment_listview_item_textview);
         textView.setText("Priority " + items.get(position).getValue());
-        return null;
+        return convertView;
     }
 }
