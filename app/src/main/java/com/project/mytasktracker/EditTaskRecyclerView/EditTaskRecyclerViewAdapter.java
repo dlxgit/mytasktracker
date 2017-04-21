@@ -6,7 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.project.mytasktracker.Callback;
 import com.project.mytasktracker.ContentTaskItem.TaskRecyclerViewHolder;
+import com.project.mytasktracker.EditTaskActivity;
 import com.project.mytasktracker.R;
 
 import java.util.ArrayList;
@@ -14,11 +16,12 @@ import java.util.ArrayList;
 public class EditTaskRecyclerViewAdapter extends RecyclerView.Adapter<EditTaskRecyclerViewHolder> {
 
     ArrayList<EditTaskRecyclerViewItem> m_items;
+    OnListItemSelectCallback onSelectItemCallBack;
 
 
-    public EditTaskRecyclerViewAdapter(ArrayList<EditTaskRecyclerViewItem> items) {
+    public EditTaskRecyclerViewAdapter(ArrayList<EditTaskRecyclerViewItem> items, OnListItemSelectCallback onSelectItemCallBack) {
         this.m_items = items;
-
+        this.onSelectItemCallBack = onSelectItemCallBack;
     }
 
     @Override
@@ -35,5 +38,9 @@ public class EditTaskRecyclerViewAdapter extends RecyclerView.Adapter<EditTaskRe
     @Override
     public int getItemCount() {
         return m_items.size();
+    }
+
+    public interface OnListItemSelectCallback{
+        void call(EditTaskRecyclerViewItem.ItemType type);
     }
 }

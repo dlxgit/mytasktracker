@@ -13,7 +13,6 @@ import com.project.mytasktracker.R;
 public class TaskRecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     View root;
     TextView name;
-
     int position;
     TaskItem taskItem;
     TaskRecyclerViewAdapter adapter;

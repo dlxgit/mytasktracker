@@ -3,21 +3,33 @@ package com.project.mytasktracker;
 import android.graphics.BitmapFactory;
 import android.support.design.widget.FloatingActionButton;
 import android.support.graphics.drawable.VectorDrawableCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.project.mytasktracker.ContentTaskItem.TaskItem;
+import com.project.mytasktracker.DatePicking.DatePickingFragment;
 import com.project.mytasktracker.EditTaskRecyclerView.EditTaskRecyclerViewAdapter;
 import com.project.mytasktracker.EditTaskRecyclerView.EditTaskRecyclerViewItem;
+import com.project.mytasktracker.Fragments.Priority.PriorityDialogFragment;
+import com.project.mytasktracker.Fragments.Priority.PriorityFragment;
 
 import java.util.ArrayList;
 
-public class EditTaskActivity extends AppCompatActivity {
+
+public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyclerViewAdapter.OnListItemSelectCallback {
+
     String default_value_labels = "No label";
     String default_value_parent = "No parent";
     String default_value_comments = "No comments";
@@ -67,22 +79,63 @@ public class EditTaskActivity extends AppCompatActivity {
 //        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.COMMENTS), "Comments", default_value_comments));
 //        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.PHOTOS), "Attached photos", default_value_photos));
 //        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.REMINDERS), "Reminders", default_value_reminders));
-        
-        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.DATE), "Due date", "today"));
-        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.PRIORITY), "Priority", "default_priority"));
-        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.LABELS), "Labels", default_value_labels));
-        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.PARENT), "Parent", default_value_parent));
-        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.COMMENTS), "Comments", default_value_comments));
-        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.PHOTOS), "Attached photos", default_value_photos));
-        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.REMINDERS), "Reminders", default_value_reminders));
 
-        adapter = new EditTaskRecyclerViewAdapter(items);
+        items = new ArrayList<>();
+        items.add(new EditTaskRecyclerViewItem(VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_date_range_black_24dp, getTheme()), "Due date", "today", EditTaskRecyclerViewItem.ItemType.DATE));
+        items.add(new EditTaskRecyclerViewItem(VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_priority_high_black_24dp, getTheme()), "Priority", "default_priority", EditTaskRecyclerViewItem.ItemType.PRIORITY));
+        items.add(new EditTaskRecyclerViewItem(VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_label_outline_black_24dp, getTheme()), "Labels", default_value_labels, EditTaskRecyclerViewItem.ItemType.LABELS));
+        items.add(new EditTaskRecyclerViewItem(VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_low_priority_black_24dp, getTheme()), "Parent", default_value_parent, EditTaskRecyclerViewItem.ItemType.PARENT));
+        items.add(new EditTaskRecyclerViewItem(VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_chat_bubble_outline_black_24dp, getTheme()), "Comments", default_value_comments, EditTaskRecyclerViewItem.ItemType.COMMENTS));
+        items.add(new EditTaskRecyclerViewItem(VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_photo_library_black_24dp, getTheme()), "Attached photos", default_value_photos, EditTaskRecyclerViewItem.ItemType.PHOTOS));
+        items.add(new EditTaskRecyclerViewItem(VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_notifications_none_black_24dp, getTheme()), "Reminders", default_value_reminders, EditTaskRecyclerViewItem.ItemType.REMINDERS));
+
+//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.DATE), "Due date", "today"));
+//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.PRIORITY), "Priority", "default_priority"));
+//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.LABELS), "Labels", default_value_labels));
+//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.PARENT), "Parent", default_value_parent));
+//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.COMMENTS), "Comments", default_value_comments));
+//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.PHOTOS), "Attached photos", default_value_photos));
+//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.REMINDERS), "Reminders", default_value_reminders));
+
+        adapter = new EditTaskRecyclerViewAdapter(items, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 
         //adapter.notifyItemRangeChanged(0, items.size());
         //TaskItem taskItem = TaskItem.fromIntent(getIntent());
     }
 
+    public void onListItemSelect(EditTaskRecyclerViewItem.ItemType type) {
+        switch (type) {
+            case DATE:
+
+                break;
+            case PRIORITY:
+//                Fragment fragment = new PriorityFragment();
+//                FragmentManager fm = getSupportFragmentManager();
+//                FragmentTransaction ft = fm.beginTransaction();
+//                ft.add(R.id.edit_task_activity_root, fragment);
+//                ft.commit();
+                new PriorityDialogFragment().show(getSupportFragmentManager(), "dialog-priority");
+
+                break;
+            case LABELS:
+                break;
+            case PARENT:
+                break;
+            case COMMENTS:
+                break;
+            case PHOTOS:
+                break;
+            case REMINDERS:
+                break;
+        }
+    }
+
+    @Override
+    public void call(EditTaskRecyclerViewItem.ItemType type) {
+        onListItemSelect(type);
+    }
 
 }

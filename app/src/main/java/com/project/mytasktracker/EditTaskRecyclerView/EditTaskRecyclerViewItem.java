@@ -23,6 +23,16 @@ public class EditTaskRecyclerViewItem {
     String header;
     String description;
 
+    public ItemType getType() {
+        return type;
+    }
+
+    public void setType(ItemType type) {
+        this.type = type;
+    }
+
+    ItemType type;
+
     public EditTaskRecyclerViewItem(ItemType itemType, Activity activity) {
         Resources resources = activity.getResources();
         Resources.Theme theme = activity.getTheme();
@@ -60,10 +70,11 @@ public class EditTaskRecyclerViewItem {
         }
     }
 
-    public EditTaskRecyclerViewItem(VectorDrawableCompat image, String header, String description) {
+    public EditTaskRecyclerViewItem(VectorDrawableCompat image, String header, String description, ItemType type) {
         this.header = header;
         this.description = description;
         this.image = image;
+        this.type = type;
     }
 
     public VectorDrawableCompat getImage() {
