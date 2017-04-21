@@ -14,12 +14,13 @@ import android.widget.TextView;
 import com.project.mytasktracker.ContentTaskItem.TaskItem;
 import com.project.mytasktracker.EditTaskRecyclerView.EditTaskRecyclerViewAdapter;
 import com.project.mytasktracker.EditTaskRecyclerView.EditTaskRecyclerViewItem;
+import com.project.mytasktracker.Fragments.Priority.Labels.LabelsDialogFragment;
 import com.project.mytasktracker.Fragments.Priority.PriorityDialogFragment;
 
 import java.util.ArrayList;
 
 
-public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyclerViewAdapter.OnListItemSelectCallback, PriorityDialogFragment.OnDialogResultListener {
+public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyclerViewAdapter.OnListItemSelectCallback, PriorityDialogFragment.OnDialogResultListener, LabelsDialogFragment.OnDialogResultListener {
 
     String default_value_labels = "No label";
     String default_value_parent = "No parent";
@@ -115,11 +116,13 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyc
 //                FragmentTransaction ft = fm.beginTransaction();
 //                ft.add(R.id.edit_task_activity_root, fragment);
 //                ft.commit();
-                DialogFragment dialogFragment = new PriorityDialogFragment(taskitem, this);
-                dialogFragment.show(getSupportFragmentManager(), "dialog-priority");
+                DialogFragment f1 = new PriorityDialogFragment(taskitem, this);
+                f1.show(getSupportFragmentManager(), "dialog-priority");
 
                 break;
             case LABELS:
+                DialogFragment f2 = new LabelsDialogFragment(taskitem, this);
+                f2.show(getSupportFragmentManager(), "dialog-labels");
                 break;
             case PARENT:
                 break;
@@ -140,6 +143,12 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyc
     @Override
     public void onDialogResult(int priority) {
         adapter.getItem(EditTaskRecyclerViewItem.ItemType.PRIORITY).setDescription("Priority " + priority);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDialogResult(String labels) {
+        adapter.getItem(EditTaskRecyclerViewItem.ItemType.LABELS).setDescription("Labels: " + labels);
         adapter.notifyDataSetChanged();
     }
 }

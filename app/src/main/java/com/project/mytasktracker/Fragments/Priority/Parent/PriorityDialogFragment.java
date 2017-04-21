@@ -1,4 +1,4 @@
-package com.project.mytasktracker.Fragments.Priority;
+package com.project.mytasktracker.Fragments.Priority.Parent;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,7 +13,6 @@ import com.project.mytasktracker.ContentTaskItem.TaskItem;
 import com.project.mytasktracker.R;
 
 import java.util.ArrayList;
-
 
 
 public class PriorityDialogFragment extends DialogFragment{
