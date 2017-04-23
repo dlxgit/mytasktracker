@@ -315,11 +315,14 @@ public class NavigationDrawerActivity extends AppCompatActivity
         if(contentRecyclerViewAdapter.isAnySelected()) {
             TaskItem it = contentRecyclerViewAdapter.getFirstSelected();
 
-            Intent intent = it.toIntent();
-            intent.setClass(this, EditTaskActivity.class);
+            Intent intent = new Intent(getApplicationContext(),EditTaskActivity.class);
+            intent.putExtras(it.toBundle());
+            //intent.putExtra()
+            intent.putExtra("allitems", getItemsData());
+            //intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
             startActivityForResult(intent, RESULT_OK);
             //TODO: edit
-
         }
         onSelectionModeEnd();
     }
@@ -351,5 +354,20 @@ public class NavigationDrawerActivity extends AppCompatActivity
     @Override
     public void onFragmentInteraction(Uri uri) {
         onTaskDateEdit();
+    }
+
+    private ArrayList<Bundle> getItemsData() {
+        ArrayList<Bundle> result = new ArrayList<>();
+
+        for(int i = 0; i < contentTaskItemList.size(); ++i) {
+            result.add(contentTaskItemList.get(i).toBundle());
+        }
+        return result;
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
 }

@@ -10,15 +10,18 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.project.mytasktracker.ContentTaskItem.TaskItem;
+import com.project.mytasktracker.EditTaskActivity;
+import com.project.mytasktracker.EditTaskRecyclerView.EditTaskRecyclerViewItem;
+import com.project.mytasktracker.Fragments.Priority.OnDialogResultListener;
 import com.project.mytasktracker.R;
 
 import java.util.ArrayList;
 
 
 public class ParentDialogFragment extends DialogFragment{
-    public interface OnDialogResultListener {
-        void onDialogResult(int priority);
-    }
+//    public interface OnDialogResultListener {
+//        void onDialogResult(EditTaskRecyclerViewItem.ItemType type, int priority);
+//    }
 
     OnDialogResultListener listener;
 
@@ -36,7 +39,7 @@ public class ParentDialogFragment extends DialogFragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         getDialog().setTitle("Title");
-        View v = inflater.inflate(R.layout.fragment_priority, null);
+        View v = inflater.inflate(R.layout.dialogfragment_parent, null);
         //init children of v
 
         listView = (ListView) v.findViewById(R.id.dialogfragment_parent_listview);
@@ -45,7 +48,13 @@ public class ParentDialogFragment extends DialogFragment{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //item.setParent(adapter.items.get(position).getValue());
                 dismiss();
-                listener.onDialogResult(item.getPriority());
+                Bundle res = new Bundle();
+                ArrayList<String> resData = new ArrayList<String>();
+                resData.add(String.valueOf(item.getPriority()));
+
+                res.putStringArrayList("result", resData);
+
+                listener.onDialogResult(EditTaskRecyclerViewItem.ItemType.PARENT, res);
             }
         });
         initAdapter();

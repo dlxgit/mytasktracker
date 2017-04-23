@@ -1,5 +1,6 @@
 package com.project.mytasktracker;
 
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.DialogFragment;
@@ -15,19 +16,20 @@ import com.project.mytasktracker.ContentTaskItem.TaskItem;
 import com.project.mytasktracker.EditTaskRecyclerView.EditTaskRecyclerViewAdapter;
 import com.project.mytasktracker.EditTaskRecyclerView.EditTaskRecyclerViewItem;
 import com.project.mytasktracker.Fragments.Priority.Labels.LabelsDialogFragment;
+import com.project.mytasktracker.Fragments.Priority.OnDialogResultListener;
+import com.project.mytasktracker.Fragments.Priority.Parent.ParentDialogFragment;
 import com.project.mytasktracker.Fragments.Priority.PriorityDialogFragment;
 
 import java.util.ArrayList;
 
 
-public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyclerViewAdapter.OnListItemSelectCallback, PriorityDialogFragment.OnDialogResultListener, LabelsDialogFragment.OnDialogResultListener {
+public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyclerViewAdapter.OnListItemSelectCallback, OnDialogResultListener {
 
     String default_value_labels = "No label";
     String default_value_parent = "No parent";
     String default_value_comments = "No comments";
     String default_value_photos = "No photos";
     String default_value_reminders = "No reminders";
-
 
 
     FloatingActionButton fab;
@@ -39,14 +41,23 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyc
 
     ArrayList<EditTaskRecyclerViewItem> items;
 
+    ArrayList<TaskItem> allItems;
     TaskItem taskitem;
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_task);
 
-        taskitem = new TaskItem(getIntent());
+        Bundle extras = getIntent().getExtras();
+        taskitem = new TaskItem(extras);
+        allItems = TaskItem.getItemsFromBundle(extras);
 
         fab = (FloatingActionButton) findViewById(R.id.edit_task_activity_fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -116,15 +127,17 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyc
 //                FragmentTransaction ft = fm.beginTransaction();
 //                ft.add(R.id.edit_task_activity_root, fragment);
 //                ft.commit();
-                DialogFragment f1 = new PriorityDialogFragment(taskitem, this);
-                f1.show(getSupportFragmentManager(), "dialog-priority");
+                DialogFragment f2 = new PriorityDialogFragment(taskitem, this);
+                f2.show(getSupportFragmentManager(), "dialog-priority");
 
                 break;
             case LABELS:
-                DialogFragment f2 = new LabelsDialogFragment(taskitem, this);
-                f2.show(getSupportFragmentManager(), "dialog-labels");
+                DialogFragment f3 = new LabelsDialogFragment(taskitem, this);
+                f3.show(getSupportFragmentManager(), "dialog-labels");
                 break;
             case PARENT:
+                DialogFragment f4 = new ParentDialogFragment(taskitem, this);
+                f4.show(getSupportFragmentManager(), "dialog-parent");
                 break;
             case COMMENTS:
                 break;
@@ -141,14 +154,31 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyc
     }
 
     @Override
-    public void onDialogResult(int priority) {
-        adapter.getItem(EditTaskRecyclerViewItem.ItemType.PRIORITY).setDescription("Priority " + priority);
-        adapter.notifyDataSetChanged();
+    public void onDialogResult(EditTaskRecyclerViewItem.ItemType type, Bundle bundle) {
+        ArrayList<String> data = bundle.getStringArrayList("result");
+
+        switch (type) {
+            case DATE:
+
+                break;
+            case PRIORITY:
+                adapter.getItem(EditTaskRecyclerViewItem.ItemType.PRIORITY).setDescription("Priority " + data.get(0));
+                adapter.notifyDataSetChanged();
+                break;
+            case LABELS:
+                adapter.getItem(EditTaskRecyclerViewItem.ItemType.LABELS).setDescription("Labels: " + data.get(0));
+                adapter.notifyDataSetChanged();
+                break;
+            case PARENT:
+
+                break;
+            case COMMENTS:
+                break;
+            case PHOTOS:
+                break;
+            case REMINDERS:
+                break;
+        }
     }
 
-    @Override
-    public void onDialogResult(String labels) {
-        adapter.getItem(EditTaskRecyclerViewItem.ItemType.LABELS).setDescription("Labels: " + labels);
-        adapter.notifyDataSetChanged();
-    }
 }

@@ -1,15 +1,14 @@
 package com.project.mytasktracker.ContentTaskItem;
 
-import android.content.Intent;
 import android.os.Bundle;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 
 public class TaskItem {
@@ -46,30 +45,37 @@ public class TaskItem {
         this.reminders = new ArrayList<>();
     }
 
-    public Intent toIntent() {
-        Intent intent = new Intent();
+    public Bundle toBundle() {
+        Bundle bundle = new Bundle();
+        bundle.putString("header", name);
+        bundle.putString("description", description);
+        bundle.putLong("date", deadline.getTime());
+        bundle.putString("priority", String.valueOf(priority));
+        bundle.putStringArrayList("labels", labels);
+        bundle.putStringArrayList("reminders", getRemindersAsStrings());
+        bundle.putStringArrayList("photos", photos);
 
-        intent.putExtra("header", name);
-        intent.putExtra("description", description);
-        intent.putExtra("date", deadline);
-        intent.putExtra("priority", String.valueOf(priority));
-        intent.putExtra("labels", labels);
-        intent.putExtra("reminders", getRemindersAsStrings());
-        intent.putExtra("photos", photos);
-
-        return intent;
+        return bundle;
     }
 
-    public TaskItem(Intent intent) {
+    public static ArrayList<TaskItem> getItemsFromBundle(Bundle bundle) {
+        //Serializable serializable = bundle.getSerializable("allitems");
+        ArrayList<Bundle> source = (ArrayList<Bundle>) bundle.getSerializable("allitems");
+        ArrayList<TaskItem> result = new ArrayList<>();
+        for(int i = 0; i < source.size(); ++i) {
+            result.add(new TaskItem(source.get(i)));
+        }
 
-        Bundle extras = intent.getExtras();
+        return result;
+    }
 
-        if (extras.containsKey("header")) {
+    public TaskItem(Bundle bundle) {
+        if (bundle.containsKey("header")) {
 
             Date date = new Date();
             DateFormat format = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH);
             //try {
-                String strr = intent.getStringExtra("date");
+                String strr = bundle.getString("date");
                 //this.deadline = format.parse(str);
                 this.deadline = new Date(222222);
 //            } catch (ParseException e) {
@@ -83,7 +89,7 @@ public class TaskItem {
             try {
                 ArrayList<String> strings = new ArrayList<>();
                 this.reminders = new ArrayList<>();
-                strings = intent.getStringArrayListExtra("reminders");
+                strings = bundle.getStringArrayList("reminders");
                 for(String str : strings) {
                     this.reminders.add(format.parse(str));
                 }
@@ -93,14 +99,14 @@ public class TaskItem {
 
             ArrayList<String> strings = new ArrayList<>();
             this.reminders = new ArrayList<>();
-            this.labels = intent.getStringArrayListExtra("labels");
+            this.labels = bundle.getStringArrayList("labels");
 
             //this.photos = intent.getStringExtra("photos");
         }
 
-        this.name = intent.getStringExtra("header");
-        this.description = intent.getStringExtra("description");
-        this.priority = Integer.parseInt(intent.getStringExtra("priority"));
+        this.name = bundle.getString("header");
+        this.description = bundle.getString("description");
+        this.priority = Integer.parseInt(bundle.getString("priority"));
 
         this.deadline = new Date();
         this.photos = new ArrayList<>();

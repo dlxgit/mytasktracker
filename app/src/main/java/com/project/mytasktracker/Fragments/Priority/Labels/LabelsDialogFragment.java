@@ -10,13 +10,17 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.project.mytasktracker.ContentTaskItem.TaskItem;
+import com.project.mytasktracker.EditTaskRecyclerView.EditTaskRecyclerViewItem;
+import com.project.mytasktracker.Fragments.Priority.OnDialogResultListener;
 import com.project.mytasktracker.R;
+
+import java.util.ArrayList;
 
 
 public class LabelsDialogFragment extends DialogFragment {
-    public interface OnDialogResultListener {
-        void onDialogResult(String labels);
-    }
+//    public interface OnDialogResultListener {
+//        void onDialogResult(EditTaskRecyclerViewItem.ItemType type, String labels);
+//    }
 
     OnDialogResultListener listener;
 
@@ -26,6 +30,7 @@ public class LabelsDialogFragment extends DialogFragment {
         this.item = item;
         this.listener = listener;
     }
+
 
     @Nullable
     @Override
@@ -48,9 +53,16 @@ public class LabelsDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 dismiss();
-                listener.onDialogResult(editText.getText().toString());
+
+                Bundle res = new Bundle();
+                ArrayList<String> resData = new ArrayList<String>();
+                resData.add(editText.getText().toString());
+                res.putStringArrayList("result", resData);
+
+                listener.onDialogResult(EditTaskRecyclerViewItem.ItemType.LABELS, res);
             }
         });
+
         return v;
     }
 }

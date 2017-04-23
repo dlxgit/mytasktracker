@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.project.mytasktracker.ContentTaskItem.TaskItem;
+import com.project.mytasktracker.EditTaskRecyclerView.EditTaskRecyclerViewItem;
 import com.project.mytasktracker.R;
 
 import java.util.ArrayList;
@@ -17,9 +18,9 @@ import java.util.ArrayList;
 
 
 public class PriorityDialogFragment extends DialogFragment{
-    public interface OnDialogResultListener {
-        void onDialogResult(int priority);
-    }
+//    public interface OnDialogResultListener {
+//        void onDialogResult(EditTaskRecyclerViewItem.ItemType type, int priority);
+//    }
 
     OnDialogResultListener listener;
 
@@ -46,7 +47,13 @@ public class PriorityDialogFragment extends DialogFragment{
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 item.setPriority(adapter.items.get(position).getValue());
                 dismiss();
-                listener.onDialogResult(item.getPriority());
+
+                Bundle res = new Bundle();
+                ArrayList<String> resData = new ArrayList<String>();
+                resData.add(String.valueOf(item.getPriority()));
+
+                res.putStringArrayList("result", resData);
+                listener.onDialogResult(EditTaskRecyclerViewItem.ItemType.PRIORITY, res);
             }
         });
         initAdapter();
