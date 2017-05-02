@@ -1,6 +1,7 @@
 package com.project.mytasktracker.ContentTaskItem;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -157,6 +158,17 @@ public class TaskRecyclerViewAdapter extends RecyclerView.Adapter<TaskRecyclerVi
         return !selectedItems.isEmpty();
     }
     //TODO: edit soon
+
+    public ArrayList<Integer> getIndexesOfSelected(){
+        ArrayList<Integer> result = new ArrayList<>();
+
+        for(int i = 0; i < selectedItems.size(); ++i) {
+            result.add(m_items.indexOf(selectedItems.get(i)));
+        }
+
+        return result;
+    }
+
     public TaskItem getFirstSelected() {
         return selectedItems.get(0);
     }

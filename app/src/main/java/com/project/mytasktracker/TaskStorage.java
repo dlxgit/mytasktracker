@@ -1,6 +1,7 @@
 package com.project.mytasktracker;
 
 import com.project.mytasktracker.ContentTaskItem.TaskItem;
+import com.project.mytasktracker.MenuFolderItem.TaskFolderItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,8 +10,8 @@ import java.util.HashMap;
 
 public class TaskStorage {
     HashMap<String, ArrayList<TaskItem>> hashMap;
-    //today
-    //next7days
+    ArrayList<String> folderNames; //index - id, String name;
+    ArrayList<TaskFolderItem> folders;
 
     public TaskStorage(ArrayList<String> folders) {
         hashMap = new HashMap<String, ArrayList<TaskItem>>();
@@ -21,7 +22,12 @@ public class TaskStorage {
             taskItems.add(new TaskItem("Name" + i, "Description" + i, 1));
         }
 
-        for(String folder:folders) {
+        folderNames = new ArrayList<>();
+        this.folders = new ArrayList<>();
+        for(int i = 0; i < folders.size(); ++i) {
+            String folder = folders.get(i);
+            this.folders.add(new TaskFolderItem(folder));
+            folderNames.add(folder);
             ArrayList<TaskItem> newItems = new ArrayList<>();
             for(TaskItem taskItm:taskItems) {
                 TaskItem newItem = new TaskItem(taskItm.getName(), taskItm.getDescription(), taskItm.getPriority());
@@ -89,11 +95,12 @@ public class TaskStorage {
         //comparator?(many) collection?
     }
 
+    public ArrayList<TaskItem> getCurrentData(int id) {
+        return getCurrentData(folderNames.get(id));
+    }
+
     public ArrayList<TaskItem> getCurrentData(String key) {
         Object res =  hashMap.get(key);
         return (ArrayList<TaskItem>) res;
     }
-
-
-
 }

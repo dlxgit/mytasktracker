@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -15,10 +16,13 @@ import android.widget.TextView;
 import com.project.mytasktracker.ContentTaskItem.TaskItem;
 import com.project.mytasktracker.EditTaskRecyclerView.EditTaskRecyclerViewAdapter;
 import com.project.mytasktracker.EditTaskRecyclerView.EditTaskRecyclerViewItem;
+import com.project.mytasktracker.Fragments.Priority.Comments.CommentsDialogFragment;
 import com.project.mytasktracker.Fragments.Priority.Labels.LabelsDialogFragment;
 import com.project.mytasktracker.Fragments.Priority.OnDialogResultListener;
 import com.project.mytasktracker.Fragments.Priority.Parent.ParentDialogFragment;
+import com.project.mytasktracker.Fragments.Priority.Photos.PhotosDialogFragment;
 import com.project.mytasktracker.Fragments.Priority.PriorityDialogFragment;
+import com.project.mytasktracker.Fragments.Priority.Reminders.RemindersDialogFragment;
 
 import java.util.ArrayList;
 
@@ -55,9 +59,16 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyc
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_task);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.edit_task_activity_toolbar);
+//        setSActionBar(toolbar);
+//        getSupportActionBar().setTitle("Edit task");
+
+
         Bundle extras = getIntent().getExtras();
-        taskitem = new TaskItem(extras);
-        allItems = TaskItem.getItemsFromBundle(extras);
+        int indexFolder = extras.getInt("selected_folder_id");
+        int indexItem = extras.getInt("selected_item_id");
+        allItems = MyApplication.getInstance().getTaskStorage().getCurrentData(indexFolder);
+        taskitem = allItems.get(indexItem);
 
         fab = (FloatingActionButton) findViewById(R.id.edit_task_activity_fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -81,15 +92,6 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyc
         recyclerView = (RecyclerView) findViewById(R.id.edit_task_activity_recyclerview);
 
         items = new ArrayList<>();
-//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.DATE), "Due date", "today"));
-//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.PRIORITY), "Priority", "default_priority"));
-//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.LABELS), "Labels", default_value_labels));
-//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.PARENT), "Parent", default_value_parent));
-//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.COMMENTS), "Comments", default_value_comments));
-//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.PHOTOS), "Attached photos", default_value_photos));
-//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.REMINDERS), "Reminders", default_value_reminders));
-
-        items = new ArrayList<>();
         items.add(new EditTaskRecyclerViewItem(VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_date_range_black_24dp, getTheme()), "Due date", "today", EditTaskRecyclerViewItem.ItemType.DATE));
         items.add(new EditTaskRecyclerViewItem(VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_priority_high_black_24dp, getTheme()), "Priority", "default_priority", EditTaskRecyclerViewItem.ItemType.PRIORITY));
         items.add(new EditTaskRecyclerViewItem(VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_label_outline_black_24dp, getTheme()), "Labels", default_value_labels, EditTaskRecyclerViewItem.ItemType.LABELS));
@@ -98,22 +100,9 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyc
         items.add(new EditTaskRecyclerViewItem(VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_photo_library_black_24dp, getTheme()), "Attached photos", default_value_photos, EditTaskRecyclerViewItem.ItemType.PHOTOS));
         items.add(new EditTaskRecyclerViewItem(VectorDrawableCompat.create(this.getResources(), R.drawable.ic_vec_notifications_none_black_24dp, getTheme()), "Reminders", default_value_reminders, EditTaskRecyclerViewItem.ItemType.REMINDERS));
 
-//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.DATE), "Due date", "today"));
-//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.PRIORITY), "Priority", "default_priority"));
-//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.LABELS), "Labels", default_value_labels));
-//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.PARENT), "Parent", default_value_parent));
-//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.COMMENTS), "Comments", default_value_comments));
-//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.PHOTOS), "Attached photos", default_value_photos));
-//        items.add(new EditTaskRecyclerViewItem(getImageOf(EditTaskRecyclerViewItem.ItemType.REMINDERS), "Reminders", default_value_reminders));
-
         adapter = new EditTaskRecyclerViewAdapter(items, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-
-        //adapter.notifyItemRangeChanged(0, items.size());
-        //TaskItem taskItem = TaskItem.fromIntent(getIntent());
-
     }
 
     public void onListItemSelect(EditTaskRecyclerViewItem.ItemType type) {
@@ -122,14 +111,8 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyc
 
                 break;
             case PRIORITY:
-//                Fragment fragment = new PriorityFragment();
-//                FragmentManager fm = getSupportFragmentManager();
-//                FragmentTransaction ft = fm.beginTransaction();
-//                ft.add(R.id.edit_task_activity_root, fragment);
-//                ft.commit();
                 DialogFragment f2 = new PriorityDialogFragment(taskitem, this);
                 f2.show(getSupportFragmentManager(), "dialog-priority");
-
                 break;
             case LABELS:
                 DialogFragment f3 = new LabelsDialogFragment(taskitem, this);
@@ -140,10 +123,16 @@ public class EditTaskActivity extends AppCompatActivity implements EditTaskRecyc
                 f4.show(getSupportFragmentManager(), "dialog-parent");
                 break;
             case COMMENTS:
+                DialogFragment f5 = new CommentsDialogFragment(taskitem, this);
+                f5.show(getSupportFragmentManager(), "dialog-comments");
                 break;
             case PHOTOS:
+                DialogFragment f6 = new PhotosDialogFragment(taskitem, this);
+                f6.show(getSupportFragmentManager(), "dialog-photos");
                 break;
             case REMINDERS:
+                DialogFragment f7 = new RemindersDialogFragment(taskitem, this);
+                f7.show(getSupportFragmentManager(), "dialog-remidners");
                 break;
         }
     }

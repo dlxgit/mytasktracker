@@ -1,17 +1,23 @@
 package com.project.mytasktracker.Fragments.Priority.Parent;
 
-/**
- * Created by Andrey on 20.04.2017.
- */
 
 public class ParentItem {
-    int value;
+    String name;
+    boolean isSelected = false;
 
-    public ParentItem(int value) {
-        this.value = value;
+    public ParentItem(String value) {
+        this.name = value;
     }
 
-    public int getValue() {
-        return value;
+    public String getValue() {
+        return name;
+    }
+
+    public void setSelected(boolean flag) {
+        this.isSelected = flag;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
     }
 }

@@ -13,6 +13,7 @@ import com.project.mytasktracker.ContentTaskItem.TaskItem;
 import com.project.mytasktracker.EditTaskActivity;
 import com.project.mytasktracker.EditTaskRecyclerView.EditTaskRecyclerViewItem;
 import com.project.mytasktracker.Fragments.Priority.OnDialogResultListener;
+import com.project.mytasktracker.MyApplication;
 import com.project.mytasktracker.R;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class ParentDialogFragment extends DialogFragment{
     ParentListViewAdapter adapter;
 
     TaskItem item;
+    int indexSelected;
 
     public ParentDialogFragment(TaskItem item, OnDialogResultListener listener) {
         this.item = item;
@@ -47,28 +49,40 @@ public class ParentDialogFragment extends DialogFragment{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //item.setParent(adapter.items.get(position).getValue());
-                dismiss();
-                Bundle res = new Bundle();
-                ArrayList<String> resData = new ArrayList<String>();
-                resData.add(String.valueOf(item.getPriority()));
+                if(position != indexSelected) {
 
-                res.putStringArrayList("result", resData);
+                    Bundle res = new Bundle();
+                    ArrayList<String> resData = new ArrayList<String>();
+                    resData.add(String.valueOf(item.getPriority()));
+                    res.putStringArrayList("result", resData);
 
-                listener.onDialogResult(EditTaskRecyclerViewItem.ItemType.PARENT, res);
+                    dismiss();
+                    //TODO: ?whats going on here (is it reachable?)
+                    listener.onDialogResult(EditTaskRecyclerViewItem.ItemType.PARENT, res);
+                }
             }
         });
-        initAdapter();
+        initAdapter(getActivity().getIntent().getExtras());
         listView.setAdapter(adapter);
 
         //return super.onCreateView(inflater, container, savedInstanceState);
         return v;
     }
 
-    public void initAdapter() {
-        ArrayList<ParentItem> parentItems = new ArrayList<>();
-        for(int i = 4; i > 0; --i) {
-            parentItems.add(new ParentItem(i));
+    public void initAdapter(Bundle extras) {
+        int indexFolder = extras.getInt("selected_folder_id");
+        int indexItem = extras.getInt("selected_item_id");
+        ArrayList<TaskItem> allItems = MyApplication.getInstance().getTaskStorage().getCurrentData(indexFolder);
+        //ArrayList<> parentItems = new ArrayList<>();
+//        for(int i = 4; i > 0; --i) {
+//            .add(new ParentItem(i));
+//        }
+        indexSelected = indexItem;
+        ArrayList<ParentItem> parents = new ArrayList<>();
+        for(TaskItem item : allItems) {
+            parents.add(new ParentItem(item.getName()));
         }
-        adapter = new ParentListViewAdapter(parentItems, this, listView );
+        parents.get(indexItem).setSelected(true);
+        adapter = new ParentListViewAdapter(parents, this);
     }
 }

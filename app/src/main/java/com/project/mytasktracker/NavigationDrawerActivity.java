@@ -31,6 +31,17 @@ import com.project.mytasktracker.MenuFolderItem.TaskFolderItem;
 
 import java.util.ArrayList;
 
+/*
+
+    TODO: transform edittaskactivity into fragment (with disabling navigation inside it)
+    TODO: inside folder-content-taskitem draw icons of : photo,comment,etc if it is used in it
+    TODO: add sorting-logic depending on parents of tasks
+
+    TODO: add folders Today, NextWeek, etc...
+ */
+
+
+
 public class NavigationDrawerActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DatePickingFragment.OnFragmentInteractionListener {
 
@@ -48,7 +59,6 @@ public class NavigationDrawerActivity extends AppCompatActivity
 
     private RecyclerView contentRecyclerView;
     private TaskRecyclerViewAdapter contentRecyclerViewAdapter;
-
     private ArrayList<TaskFolderItem> menuItemList;
     private ArrayList<TaskItem> contentTaskItemList;
 
@@ -58,8 +68,9 @@ public class NavigationDrawerActivity extends AppCompatActivity
     private boolean isActionSelectMode = false;
 
     private Toolbar toolbar;
-
     private TextView selectedItemsHeader;
+
+    private int currentFolderId = 0;
 
 
 
@@ -93,19 +104,20 @@ public class NavigationDrawerActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        menuRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        menuRecyclerView = (RecyclerView) findViewById(R.id.navigation_folders_recycler_view);
         contentRecyclerView = (RecyclerView) findViewById(R.id.content_tasks_recyclerView);
 
-        menuItemList = new ArrayList<TaskFolderItem>();
-        ArrayList<String> strList = new ArrayList<>();
-        for(int i = 0; i < 5; ++i) {
-            menuItemList.add(new TaskFolderItem("header" + i));
-            strList.add(menuItemList.get(i).getName());
-        }
 
-        taskStorage = new TaskStorage(strList);
+//        ArrayList<String> strList = new ArrayList<>();
+//        for(int i = 0; i < 5; ++i) {
+//            menuItemList.add(new TaskFolderItem("header" + i));
+//            strList.add(menuItemList.get(i).getName());
+//        }
 
-        menuRecyclerViewAdapter = new FolderRecyclerViewAdapter(this, menuItemList);
+        //taskStorage = new TaskStorage(strList);
+        taskStorage = MyApplication.getInstance().getTaskStorage();
+
+        menuRecyclerViewAdapter = new FolderRecyclerViewAdapter(this, taskStorage.folders);
         menuRecyclerView.setAdapter(menuRecyclerViewAdapter);
 
         contentTaskItemList = taskStorage.getCurrentData("header0");
@@ -316,9 +328,12 @@ public class NavigationDrawerActivity extends AppCompatActivity
             TaskItem it = contentRecyclerViewAdapter.getFirstSelected();
 
             Intent intent = new Intent(getApplicationContext(),EditTaskActivity.class);
-            intent.putExtras(it.toBundle());
-            //intent.putExtra()
-            intent.putExtra("allitems", getItemsData());
+
+            assert(contentRecyclerViewAdapter.getIndexesOfSelected().size() == 1);
+
+            intent.putExtra("selected_item_id", contentRecyclerViewAdapter.getIndexesOfSelected().get(0));
+            intent.putExtra("selected_folder_id", currentFolderId);
+
             //intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
             startActivityForResult(intent, RESULT_OK);
